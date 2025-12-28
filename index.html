@@ -50,30 +50,31 @@
   <table>
     <tr>
       <th>Current base</th>
-      <th>Next base</th>
+      <th>N1 Level</th>
       <th>Mineral level</th>
     </tr>
     <tr>
       <td><input type="number" id="currentBase" value="3"></td>
-      <td><input type="number" id="nextBase" value="4"></td>
+      <td><input type="number" id="n1Level" value="4"></td>
       <td><input type="number" id="mineralLevel" value="1"></td>
     </tr>
   </table>
 
   <button onclick="calculateVP()">Calculate VP</button>
 
-  <div id="output">VP (before multipliers): </div>
+  <div id="output">New base: <br>VP (before multipliers): </div>
 
   <script>
     function calculateVP() {
       const a = Number(document.getElementById('currentBase').value);
-      const b = Number(document.getElementById('nextBase').value);
+      const b = Number(document.getElementById('n1Level').value);
       const n = Number(document.getElementById('mineralLevel').value);
+      const newBase = (a / b) * (b + 1);
+      const vp = Math.pow(newBase, n);
+      const formattedVP = vp.toExponential(2);
 
-      let vp = Math.pow(b, n) - Math.pow(a, n)
-      let formattedVP = vp.toExponential(2);
-
-      document.getElementById('output').innerText = `VP (before multipliers): ${formattedVP}`;
+      document.getElementById('output').innerHTML = 
+        `New base: ${newBase.toFixed(2)}<br>VP (before multipliers): ${formattedVP}`;
     }
   </script>
 </body>
