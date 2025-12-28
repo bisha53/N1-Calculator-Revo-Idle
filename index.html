@@ -86,9 +86,9 @@
       const n1Level = Math.max(Number(document.getElementById('n1Level').value), 0);
       const mineralLevel = Math.max(Number(document.getElementById('mineralLevel').value), 0);
 
-      const baseWithoutMultiplier = 3 + n1Level;
-      const multiplier = currentBase / baseWithoutMultiplier;
-      const nextBase = baseWithoutMultiplier * multiplier;
+      const base = 3 + n1Level;
+      const multiplier = currentBase / base;
+      const nextBase = (base + 1) * multiplier;
 
       const vp = Math.pow(nextBase, mineralLevel);
       const formattedVP = formatVP(vp);
