@@ -62,7 +62,7 @@
 
   <button onclick="calculateVP()">Calculate VP</button>
 
-  <div id="output">New base: <br>VP (before multipliers): </div>
+  <div id="output">N1 Level: <br>VP (before multipliers): </div>
 
   <script>
     function calculateVP() {
@@ -70,17 +70,17 @@
       const b = Number(document.getElementById('n1Level').value);
       const n = Number(document.getElementById('mineralLevel').value);
 
-      // Calculate new base
-      const newBase = (a / b) * (b + 1);
+      // Calculate N1 Level value
+      const n1LevelValue = (a / b) * (b + 1);
 
       // Calculate VP
-      const vp = Math.pow(newBase, n);
+      const vp = Math.pow(n1LevelValue, n);
 
       // Format VP in scientific notation
       const formattedVP = vp.toExponential(2);
 
       document.getElementById('output').innerHTML = 
-        `New base: ${newBase.toFixed(2)}<br>VP (before multipliers): ${formattedVP}`;
+        `N1 Level: ${n1LevelValue.toFixed(2)}<br>VP (before multipliers): ${formattedVP}`;
     }
   </script>
 </body>
