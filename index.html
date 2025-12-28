@@ -38,12 +38,6 @@
       padding: 4px;
       text-align: center;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
     #output {
       font-weight: bold;
       font-size: 18px;
@@ -68,35 +62,47 @@
       <th>Mineral Level</th>
     </tr>
     <tr>
-      <td><input type="number" id="currentBase" value="20"></td>
-      <td><input type="number" id="n1Level" value="7"></td>
-      <td><input type="number" id="mineralLevel" value="1"></td>
+      <td><input type="number" id="currentBase" value="20" min="3"></td>
+      <td><input type="number" id="n1Level" value="7" min="0"></td>
+      <td><input type="number" id="mineralLevel" value="1" min="0"></td>
     </tr>
   </table>
-
-  <button onclick="calculateVP()">Calculate VP</button>
 
   <div id="output"></div>
 
   <div class="footer">bisha53</div>
 
   <script>
+    function formatVP(vp) {
+      if (vp >= 1e9) {
+        return vp.toExponential(2);
+      } else {
+        return vp.toLocaleString(undefined, {maximumFractionDigits: 2});
+      }
+    }
+
     function calculateVP() {
-      const currentBase = Number(document.getElementById('currentBase').value);
-      const n1Level = Number(document.getElementById('n1Level').value);
-      const mineralLevel = Number(document.getElementById('mineralLevel').value);
+      const currentBase = Math.max(Number(document.getElementById('currentBase').value), 3);
+      const n1Level = Math.max(Number(document.getElementById('n1Level').value), 0);
+      const mineralLevel = Math.max(Number(document.getElementById('mineralLevel').value), 0);
 
       const baseWithoutMultiplier = 3 + n1Level;
       const multiplier = currentBase / baseWithoutMultiplier;
       const nextBase = baseWithoutMultiplier * multiplier;
+
       const vp = Math.pow(nextBase, mineralLevel);
-      const formattedVP = vp.toExponential(2);
+      const formattedVP = formatVP(vp);
 
       document.getElementById('output').innerHTML =
         `Next Base: ${nextBase.toFixed(2)}<br>` +
         `Multiplier: ${multiplier.toFixed(2)}<br>` +
         `VP (before multipliers): ${formattedVP}`;
     }
+
+    const inputs = document.querySelectorAll('#currentBase, #n1Level, #mineralLevel');
+    inputs.forEach(input => input.addEventListener('input', calculateVP));
+
+    calculateVP();
   </script>
 </body>
 </html>
