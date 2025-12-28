@@ -74,11 +74,8 @@
 
   <script>
     function formatVP(vp) {
-      if (vp >= 1e9) {
-        return vp.toExponential(2);
-      } else {
-        return vp.toLocaleString(undefined, {maximumFractionDigits: 2});
-      }
+      if (vp >= 1e9) return vp.toExponential(2);
+      return vp.toLocaleString(undefined, {maximumFractionDigits: 2});
     }
 
     function calculateVP() {
@@ -88,7 +85,7 @@
 
       const base = 3 + n1Level;
       const multiplier = currentBase / base;
-      const nextBase = (base + 1) * multiplier;
+      const nextBase = base + (1 * multiplier);
 
       const vp = Math.pow(nextBase, mineralLevel);
       const formattedVP = formatVP(vp);
