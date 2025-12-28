@@ -62,7 +62,7 @@
       <th>Mineral Level</th>
     </tr>
     <tr>
-      <td><input type="number" id="currentBase" value="3" min="1"></td>
+      <td><input type="number" id="currentBase" value="3" min="1" step="0.01"></td>
       <td><input type="number" id="n1Level" value="0" min="0"></td>
       <td><input type="number" id="mineralLevel" value="1" min="0"></td>
     </tr>
@@ -83,9 +83,9 @@
       const n1Level = Math.max(Number(document.getElementById('n1Level').value), 0);
       const mineralLevel = Math.max(Number(document.getElementById('mineralLevel').value), 0);
 
-      const base = 3 + n1Level;
+      const base = n1Level + 3;
       const multiplier = currentBase / base;
-      const nextBase = base + (1 * multiplier);
+      const nextBase = multiplier * (base + 1);
 
       const vp = Math.pow(nextBase, mineralLevel);
       const formattedVP = formatVP(vp);
