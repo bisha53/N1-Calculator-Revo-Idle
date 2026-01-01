@@ -54,66 +54,72 @@
 </head>
 <body>
 
-  <h1>N1 Calculator</h1>
+<h1>N1 Calculator</h1>
 
-  <table>
-    <tr>
-      <th>Current Base</th>
-      <th>N1 Level</th>
-      <th>Mineral Level</th>
-    </tr>
-    <tr>
-      <td><input type="number" id="currentBase" value="3" min="1" step="0.01"></td>
-      <td><input type="number" id="n1Level" value="0" min="0"></td>
-      <td><input type="number" id="mineralLevel" value="1" min="0"></td>
-    </tr>
-  </table>
+<table>
+  <tr>
+    <th>Current Base</th>
+    <th>N1 Level</th>
+    <th>Mineral Level</th>
+  </tr>
+  <tr>
+    <td><input type="number" id="currentBase" value="3" min="1" step="0.01"></td>
+    <td><input type="number" id="n1Level" value="0" min="0"></td>
+    <td><input type="number" id="mineralLevel" value="1" min="0"></td>
+  </tr>
+</table>
 
-  <div id="output"></div>
+<div id="output"></div>
 
-  <div class="footer">bisha53</div>
+<div class="footer">bisha53</div>
 
-  <script>
-    function formatFromLog10(log10Value) {
-      if (!isFinite(log10Value)) return "∞";
-      if (log10Value < 6) {
-        return Math.pow(10, log10Value).toFixed(2);
-      }
-      const exponent = Math.floor(log10Value);
-      const mantissa = Math.pow(10, log10Value - exponent);
-      return `${mantissa.toFixed(2)}e${exponent}`;
-    }
+<script>
+  function formatFromLog10(v) {
+    if (!isFinite(v)) return "∞";
+    if (v < 6) return Math.pow(10, v).toFixed(2);
+    const e = Math.floor(v);
+    const m = Math.pow(10, v - e);
+    return `${m.toFixed(2)}e${e}`;
+  }
 
-    function calculateVP() {
-      const currentBase = Math.max(Number(document.getElementById('currentBase').value), 1);
-      const n1Level = Math.max(Number(document.getElementById('n1Level').value), 0);
-      const mineralLevel = Math.max(Number(document.getElementById('mineralLevel').value), 0);
+  function calculateVP() {
+    const currentBase = Math.max(+currentBaseInput.value, 1);
+    const n1Level = Math.max(+n1LevelInput.value, 0);
+    const mineralLevel = Math.max(+mineralLevelInput.value, 0);
 
-      const baseWithoutMultiplier = n1Level + 3;
-      const multiplier = currentBase / baseWithoutMultiplier;
-      const nextBase = multiplier * (baseWithoutMultiplier + 1);
+    const baseWithoutMultiplier = n1Level + 3;
+    const multiplier = currentBase / baseWithoutMultiplier;
+    const nextBase = multiplier * (baseWithoutMultiplier + 1);
 
-      const currentVP_log10 =
-        (mineralLevel - 1) * Math.log10(currentBase) - 2;
+    const currentBaseLog = Math.log10(currentBase);
+    const nextBaseLog = Math.log10(nextBase);
 
-      const nextVP_log10 =
-        (mineralLevel - 1) * Math.log10(nextBase) - 2;
+    const currentVPLog =
+      (mineralLevel - 1) * currentBaseLog - 2;
 
-      const vpGain_log10 = nextVP_log10 - currentVP_log10;
+    const nextVPLog =
+      (mineralLevel - 1) * nextBaseLog - 2;
 
-      document.getElementById('output').innerHTML =
-        `Next Base: ${nextBase.toFixed(2)}<br>` +
-        `Multiplier: ${multiplier.toFixed(2)}<br>` +
-        `Current VP (before multipliers): ${formatFromLog10(currentVP_log10)}<br>` +
-        `Next VP (before multipliers): ${formatFromLog10(nextVP_log10)}<br>` +
-        `VP Gain: ×${formatFromLog10(vpGain_log10)}`;
-    }
+    const vpGainLog = nextVPLog - currentVPLog;
 
-    const inputs = document.querySelectorAll('#currentBase, #n1Level, #mineralLevel');
-    inputs.forEach(input => input.addEventListener('input', calculateVP));
+    output.innerHTML =
+      `Next Base: ${formatFromLog10(nextBaseLog)}<br>` +
+      `Multiplier: ${formatFromLog10(Math.log10(multiplier))}<br>` +
+      `Current VP (before multipliers): ${formatFromLog10(currentVPLog)}<br>` +
+      `Next VP (before multipliers): ${formatFromLog10(nextVPLog)}<br>` +
+      `VP Gain: ×${formatFromLog10(vpGainLog)}`;
+  }
 
-    calculateVP();
-  </script>
+  const currentBaseInput = document.getElementById("currentBase");
+  const n1LevelInput = document.getElementById("n1Level");
+  const mineralLevelInput = document.getElementById("mineralLevel");
+  const output = document.getElementById("output");
+
+  [currentBaseInput, n1LevelInput, mineralLevelInput]
+    .forEach(i => i.addEventListener("input", calculateVP));
+
+  calculateVP();
+</script>
 
 </body>
 </html>
